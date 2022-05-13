@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <script type="module" src="/js/script.js"></script>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title>Draftle</title>
@@ -9,13 +8,42 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="style.css">
     </head>
-    <body onload="search();">
+    <body id="game">
         
-        <div id="game-board"></div>
+        <div id="game-board">
+            <div class="role-row">
+                <img src="/assets/top_icon.webp" class="role-icon">
+            
+                <img src="/assets/jungle_icon.webp" class="role-icon">
+
+                <img src="/assets/middle_icon.webp" class="role-icon">
+
+                <img src="/assets/bottom_icon.webp" class="role-icon">
+
+                <img src="/assets/support_icon.webp" class="role-icon">
+            </div>
+        </div>
         <center>
-        <input type="text" id="myInput" onkeyup="search()" placeholder="Search for champion">
+            <input autocomplete="off" type="text" class="search" onkeyup="search()" id="myInput" placeholder="Search for champion">
         </center>
         <div id="champion-list" class="image-with-text"></div>
-
+        <script type="module" src='./js/script.js'></script>
+        <script>
+            function search() {
+                var input = document.getElementById('myInput')
+                var images = document.querySelectorAll('.image-div > img');
+                var championNames = document.querySelectorAll('.image-div > figcaption');
+                for (var i = 0; i < images.length; i++) {
+                    if(!(new RegExp(input.value, 'i').test(images[i].id))) {
+                        images[i].style.display = 'none';
+                        championNames[i].style.display = 'none';
+                    }
+                    else {
+                        images[i].style.display = 'inline';
+                        championNames[i].style = "";
+                    }
+                }
+            }
+        </script>
     </body>
 </html>

@@ -2,6 +2,13 @@ h1 {
     text-align: center;
 }
 
+figcaption {
+    width: 120px;
+    margin-left: 8px;
+    margin-top: -4px;
+    margin-bottom: 4px;
+}
+
 #game-board {
     margin: 1rem 0;
     display: flex;
@@ -10,31 +17,41 @@ h1 {
 }
 
 #champion-list {
-    width: 1000px;
+    width: 1224px;
     margin: auto;
+    padding-left: auto;
 }
 
 #myInput {
-    width: 1000px; /* Full-width */
+    width: 1136px; /* Full-width */
     font-size: 16px; /* Increase font-size */
     padding: 12px 20px 12px 40px; /* Add some padding */
     border: 2px solid #ddd; /* Add a grey border */
     margin-bottom: 12px; /* Add some space below the input */
     
 }
-  
+
+.role-icon {
+    border: 2px solid gold;
+    border-radius: 3px;
+    margin: 2px;
+    height: 4rem;
+    width: 4rem;
+}
+
+.role-row {
+    display: flex;
+}
+
 .champion-box {
     border: 2px solid gray;
     border-radius: 3px;
     margin: 2px;
-    font-size: 2.5rem;
-    font-weight: 700;
-    height: 3rem;
-    width: 3rem;
+    height: 4rem;
+    width: 4rem;
     display: flex;
     justify-content: center;
     align-items: center;
-    text-transform: uppercase;
 }
   
 .filled-box {
@@ -52,9 +69,9 @@ h1 {
 }
 
 .green-box{
-    border: 8px solid orange;
     filter: grayscale(100%) sepia(100%) hue-rotate(90deg);
     margin: 0px;
+    border: 8px solid orange;
 }
 
 .letter-row {
@@ -62,5 +79,14 @@ h1 {
 }
 
 .champion-image-margin {
-    margin:8px;
+    margin-left: 8px;
+    margin-right: 8px;
+    margin-top: 8px;
+    margin-bottom: 8px;
 }
+
+.image-div { 
+    float: left;
+}
+
+

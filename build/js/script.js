@@ -1,27 +1,26 @@
-import { WORDS } from "./words.js";
+import { WORDS } from './words.js';
 
-const NUMBER_OF_GUESSES = 6;
+const NUMBER_OF_GUESSES = 10;
 let guessesRemaining = NUMBER_OF_GUESSES;
 let currentGuess = [];
 let wrongGuesses = [];
 let nextLetter = 0;
 let rightGuess = WORDS[Math.floor(Math.random() * WORDS.length)]
-//let rightGuess = WORDS[0]
+let searchFlag = 0;
+let alertFlag = 0;
+
 console.log(rightGuess)
 
 function initBoard() {
     let board = document.getElementById("game-board");
-
     for (let i = 0; i < NUMBER_OF_GUESSES; i++) {
         let row = document.createElement("div")
         row.className = "letter-row"
-        
         for (let j = 0; j < 5; j++) {
             let box = document.createElement("div")
             box.className = "champion-box"
             row.appendChild(box)
         }
-
         board.appendChild(row)
     }
 }
@@ -29,15 +28,15 @@ function initBoard() {
 initBoard()
 
 // Delete and Enter key functionality
-document.addEventListener("keyup", (e) => {
+document.addEventListener("keydown", (e) => {
     let pressedKey = String(e.key)
     // If backspace is pressed, call deleteGuess function
-    if (pressedKey === "Backspace" && nextLetter !== 0) {
+    if (pressedKey === "Backspace" && nextLetter !== 0 && searchFlag == 0) {
         deleteGuess()
         return
     }
     // If enter is pressed, call checkGuess function
-    if (pressedKey === "Enter") {
+    if (pressedKey === "Enter" && alertFlag === 0) {
         checkGuess()
         return
     }
@@ -53,89 +52,86 @@ function insertChampion (clickedChampion) {
     if (currentGuess.includes(clickedChampion.name)) {
         return
     }
-
+    // If the champion clicked has already been guessed incorrectly, return
     if (wrongGuesses.includes(clickedChampion.name)) {
         return
     }
-
+    shadeKeyBoard(clickedChampion.name, "gray");
     // Select the current box to place guess into
-    let row = document.getElementsByClassName("letter-row")[6 - guessesRemaining]
+    let row = document.getElementsByClassName("letter-row")[NUMBER_OF_GUESSES - guessesRemaining]
     let box = row.children[nextLetter]
-
     // Create image of champion to be inputted
     let image = document.createElement("img")
     image.src = clickedChampion.imgUrl
-    image.width = 40
-    image.height = 40
-
+    image.width = 50
+    image.height = 50
     // Add image to the current box
     box.appendChild(image)
     box.classList.add("filled-box")
-
     // Add champion name to guess list, and increment nextLetter to move onto the next box
     currentGuess.push(clickedChampion.name)
     nextLetter += 1
 }
 
 function deleteGuess () {
-    let row = document.getElementsByClassName("letter-row")[6 - guessesRemaining]
-    let box = row.children[nextLetter - 1]
-    box.textContent = ""
-    box.classList.remove("filled-box")
-    currentGuess.pop()
-    nextLetter -= 1
+    let row = document.getElementsByClassName("letter-row")[NUMBER_OF_GUESSES - guessesRemaining];
+    let box = row.children[nextLetter - 1];
+    box.textContent = "";
+    box.classList.remove("filled-box");
+    shadeKeyBoard(currentGuess[currentGuess.length - 1], "none");
+    currentGuess.pop();
+    nextLetter -= 1;
 }
 
 function checkGuess () {
-    let row = document.getElementsByClassName("letter-row")[6 - guessesRemaining]
-
+    let row = document.getElementsByClassName("letter-row")[NUMBER_OF_GUESSES - guessesRemaining];
     if (currentGuess.length != 5) {
-        alert("Select 5 champions!")
-        return
+        alertFlag = 1;
+        alert("Select 5 champions!");
+        alertFlag = 0;
+        return;
     }
 
     for (let i = 0; i < 5; i++) {
-        let boxColor = ''
-        let box = row.children[i]
-        let champion = currentGuess[i]
+        let boxColor = '';
+        let box = row.children[i];
+        let champion = currentGuess[i];
         
-        let championPosition = rightGuess.indexOf(currentGuess[i])
+        let championPosition = rightGuess.indexOf(currentGuess[i]);
         // is champion in the correct guess
         if (championPosition === -1) {
-            wrongGuesses.push(currentGuess[i])
-            boxColor = "gray"
+            wrongGuesses.push(currentGuess[i]);
+            boxColor = "gray";
         } else {
             // now, champion is definitely in word
             // if champion index and right guess index are the same
             // champion is in the right position 
             if (currentGuess[i] === rightGuess[i]) {
                 // shade green 
-                boxColor = "green"
+                boxColor = "green";
             } else {
                 // shade box yellow
-                boxColor = "yellow"
+                boxColor = "yellow";
             }
         }
 
         //shade box
-        box.style.backgroundColor = boxColor
+        box.style.backgroundColor = boxColor;
         
-        shadeKeyBoard(champion, boxColor)
+        shadeKeyBoard(champion, boxColor);
     }
 
     if (currentGuess.every((v, i) => v === rightGuess[i])) {
-    //if (currentGuess === rightGuess) {
-        alert("You guessed right! Game over!")
-        guessesRemaining = 0
-        return
+        alert("You guessed right! Game over! Refresh the page to play again!");
+        guessesRemaining = 0;
+        return;
     } else {
         guessesRemaining -= 1;
         currentGuess = [];
         nextLetter = 0;
-
         if (guessesRemaining === 0) {
-            alert("You've run out of guesses! Game over!")
-            alert(`The right word was: "${rightGuess}"`)
+            alert("You've run out of guesses! Game over!");
+            alert(`The right word was: "${rightGuess}"`);
         }
     }
 }
@@ -146,7 +142,6 @@ function shadeKeyBoard(champion, boxColor) {
         image.classList.remove("yellow-box");
         image.classList.remove("champion-image-margin");
         image.classList.add("green-box");
-        console.log(image)
     }
     if (boxColor == "yellow") {
         image.classList.remove("green-box");
@@ -156,22 +151,12 @@ function shadeKeyBoard(champion, boxColor) {
     if (boxColor == "gray") {
         image.classList.add("gray-box");
     }
-    /*
-    for (const elem of document.getElementById(champion)) {
-        if (elem.Id === champion) {
-            let oldColor = elem.style.backgroundColor
-            if (oldColor === 'green') {
-                return
-            } 
-
-            if (oldColor === 'yellow' && color !== 'green') {
-                return
-            }
-
-            elem.style.backgroundColor = color
-            break
-        }
-    }*/
+    if (boxColor == "none") {
+        image.classList.remove("green-box");
+        image.classList.remove("yellow-box");
+        image.classList.remove("gray-box");
+        image.classList.add("champion-image-margin");
+    }
 }
 
 var champions = [
@@ -251,7 +236,6 @@ var champions = [
     { name: 'Maokai', imgUrl: 'https://ddragon.leagueoflegends.com/cdn/12.8.1/img/champion/Maokai.png' },
     { name: 'Master Yi', imgUrl: 'https://ddragon.leagueoflegends.com/cdn/12.8.1/img/champion/MasterYi.png' },
     { name: 'Miss Fortune', imgUrl: 'https://ddragon.leagueoflegends.com/cdn/12.8.1/img/champion/MissFortune.png' },
-    { name: 'Wukong', imgUrl: 'https://ddragon.leagueoflegends.com/cdn/12.8.1/img/champion/MonkeyKing.png' },
     { name: 'Mordekaiser', imgUrl: 'https://ddragon.leagueoflegends.com/cdn/12.8.1/img/champion/Mordekaiser.png' },
     { name: 'Morgana', imgUrl: 'https://ddragon.leagueoflegends.com/cdn/12.8.1/img/champion/Morgana.png' },
     { name: 'Nami', imgUrl: 'https://ddragon.leagueoflegends.com/cdn/12.8.1/img/champion/Nami.png' },
@@ -260,7 +244,7 @@ var champions = [
     { name: 'Neeko', imgUrl: 'https://ddragon.leagueoflegends.com/cdn/12.8.1/img/champion/Neeko.png' },
     { name: 'Nidalee', imgUrl: 'https://ddragon.leagueoflegends.com/cdn/12.8.1/img/champion/Nidalee.png' },
     { name: 'Nocturne', imgUrl: 'https://ddragon.leagueoflegends.com/cdn/12.8.1/img/champion/Nocturne.png' },
-    { name: 'Nunu &amp; Willump', imgUrl: 'https://ddragon.leagueoflegends.com/cdn/12.8.1/img/champion/Nunu.png' },
+    { name: 'Nunu & Willump', imgUrl: 'https://ddragon.leagueoflegends.com/cdn/12.8.1/img/champion/Nunu.png' },
     { name: 'Olaf', imgUrl: 'https://ddragon.leagueoflegends.com/cdn/12.8.1/img/champion/Olaf.png' },
     { name: 'Orianna', imgUrl: 'https://ddragon.leagueoflegends.com/cdn/12.8.1/img/champion/Orianna.png' },
     { name: 'Ornn', imgUrl: 'https://ddragon.leagueoflegends.com/cdn/12.8.1/img/champion/Ornn.png' },
@@ -320,6 +304,7 @@ var champions = [
     { name: 'Vladimir', imgUrl: 'https://ddragon.leagueoflegends.com/cdn/12.8.1/img/champion/Vladimir.png' },
     { name: 'Volibear', imgUrl: 'https://ddragon.leagueoflegends.com/cdn/12.8.1/img/champion/Volibear.png' },
     { name: 'Warwick', imgUrl: 'https://ddragon.leagueoflegends.com/cdn/12.8.1/img/champion/Warwick.png' },
+    { name: 'Wukong', imgUrl: 'https://ddragon.leagueoflegends.com/cdn/12.8.1/img/champion/MonkeyKing.png' },
     { name: 'Xayah', imgUrl: 'https://ddragon.leagueoflegends.com/cdn/12.8.1/img/champion/Xayah.png' },
     { name: 'Xerath', imgUrl: 'https://ddragon.leagueoflegends.com/cdn/12.8.1/img/champion/Xerath.png' },
     { name: 'Xin Zhao', imgUrl: 'https://ddragon.leagueoflegends.com/cdn/12.8.1/img/champion/XinZhao.png' },
@@ -340,7 +325,11 @@ function initChampionList() {
     let listOfChampions = document.getElementById("champion-list");
 
     for (var i = 0; i < champions.length; i++) {
-        const img = new Image(80, 80);
+
+        const img = new Image(120, 120);
+
+        const imagediv = document.createElement("div"); 
+        imagediv.classList.add("image-div");
         var c = document.createElement("FIGCAPTION");
         var t = document.createTextNode(champions[i].name);
         c.appendChild(t);
@@ -355,28 +344,20 @@ function initChampionList() {
             insertChampion(champ);
         })
 
-        //document.body.appendChild(img);
-        listOfChampions.appendChild(img);
+        listOfChampions.appendChild(imagediv);
+        imagediv.appendChild(img);
+        imagediv.appendChild(c);
     }
 }
 initChampionList()
 
-function search() {
-    // Declare variables
-    var input, filter, ul, li, a, i, txtValue;
-    input = document.getElementById('myInput');
-    filter = input.value.toUpperCase();
-    ul = document.getElementById("myUL");
-    li = ul.getElementsByTagName('li');
-  
-    // Loop through all list items, and hide those who don't match the search query
-    for (i = 0; i < li.length; i++) {
-      a = li[i].getElementsByTagName("a")[0];
-      txtValue = a.textContent || a.innerText;
-      if (txtValue.toUpperCase().indexOf(filter) > -1) {
-        li[i].style.display = "";
-      } else {
-        li[i].style.display = "none";
-      }
-    }
-  }
+document.getElementById("myInput").addEventListener("focus", searchFlagOn);
+document.getElementById("myInput").addEventListener("focusout", searchFlagOff);
+
+function searchFlagOn() {
+    searchFlag = 1;
+}
+
+function searchFlagOff() {
+    searchFlag = 0;
+}
