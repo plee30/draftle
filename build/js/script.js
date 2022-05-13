@@ -338,6 +338,7 @@ function initChampionList() {
         img.src = champions[i].imgUrl;
         img.classList.add("champion-image-margin");
         img.classList.add("champion");
+        img.setAttribute('draggable', false);
         let champ = champions[i];
     
         img.addEventListener("click", function() {
@@ -361,3 +362,18 @@ function searchFlagOn() {
 function searchFlagOff() {
     searchFlag = 0;
 }
+
+function pop(div) {
+    document.getElementById(div).style.display = 'block';
+}
+
+function hide(div) {
+    document.getElementById(div).style.display = 'none';
+}
+//To detect escape button
+document.onkeydown = function (evt) {
+    evt = evt || window.event;
+    if (evt.keyCode == 27) {
+        hide('popDiv');
+    }
+};

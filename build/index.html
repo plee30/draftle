@@ -8,19 +8,58 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="style.css">
     </head>
-    <body id="game">
-        
+    <body>
+        <div id="popDiv" class="ontop">
+            <table border="1" id="popup">
+                <tr>
+                    <td class="instruction">
+                        <h1>How To Play</h1>
+                        
+                        <p style="font-size:large">
+                            League of Legends team composition puzzle. Guess the set of 5 characters in their respective roles. All team compositions are from the 2022 LCS Regular Spring Season. After each guess, the color of the tiles will change to show how close your guess was to the answer.
+                        </p>
+
+                        <p style="font-size:large">
+                            Gray means that character is not in the answer.
+                            <br>
+                            Yellow means that character is answer, but in a different role.
+                            <br>
+                            Green means that character is answer and in that role.
+
+                        </p>
+                        
+                        
+                        <p style="font-size:medium">
+                            Variant by Paul Lee
+                        </p>
+                        <p style="font-size:small"><em>
+                            'Draftle' isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing League of Legends. League of Legends and Riot Games are trademarks or registered trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc.	
+                            <br>
+                            All champion icons and role icons are copyrighted to Riot Games Inc.
+                        </em></p>
+                                                
+                        <center><a href="#" onClick="hide('popDiv')">Press Close or Esc</a></center>
+                        <br>
+
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <a href="#" onClick="pop('popDiv')" style="font-size:large">Instructions & Info</a>
+
+        <p class="title">DRAFTLE</p>
         <div id="game-board">
             <div class="role-row">
-                <img src="/assets/top_icon.webp" class="role-icon">
+                <img src="/assets/top_icon.webp" class="role-icon" draggable="false">
             
-                <img src="/assets/jungle_icon.webp" class="role-icon">
+                <img src="/assets/jungle_icon.webp" class="role-icon" draggable="false">
 
-                <img src="/assets/middle_icon.webp" class="role-icon">
+                <img src="/assets/middle_icon.webp" class="role-icon" draggable="false">
 
-                <img src="/assets/bottom_icon.webp" class="role-icon">
+                <img src="/assets/bottom_icon.webp" class="role-icon" draggable="false">
 
-                <img src="/assets/support_icon.webp" class="role-icon">
+                <img src="/assets/support_icon.webp" class="role-icon" draggable="false">
             </div>
         </div>
         <center>
@@ -43,6 +82,14 @@
                         championNames[i].style = "";
                     }
                 }
+            }
+            function pop(div) {
+                document.body.style.overflow = "hidden";
+                document.getElementById(div).style.display = 'block';
+            }
+            function hide(div) {
+                document.body.style.overflow = "visible";
+                document.getElementById(div).style.display = 'none';
             }
         </script>
     </body>
