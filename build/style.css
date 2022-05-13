@@ -3,12 +3,27 @@ h1 {
 }
 
 #game-board {
+    margin: 1rem 0;
     display: flex;
     align-items: center;
     flex-direction: column;
 }
+
+#champion-list {
+    width: 1000px;
+    margin: auto;
+}
+
+#myInput {
+    width: 1000px; /* Full-width */
+    font-size: 16px; /* Increase font-size */
+    padding: 12px 20px 12px 40px; /* Add some padding */
+    border: 2px solid #ddd; /* Add a grey border */
+    margin-bottom: 12px; /* Add some space below the input */
+    
+}
   
-.letter-box {
+.champion-box {
     border: 2px solid gray;
     border-radius: 3px;
     margin: 2px;
@@ -25,32 +40,27 @@ h1 {
 .filled-box {
     border: 2px solid black;
 }
-  
+
+.gray-box {
+    filter: grayscale(100%);
+}
+
+.yellow-box {
+    border: 8px solid pink;
+    filter: grayscale(100%) sepia(100%) contrast(100%);
+    margin: 0px;
+}
+
+.green-box{
+    border: 8px solid orange;
+    filter: grayscale(100%) sepia(100%) hue-rotate(90deg);
+    margin: 0px;
+}
+
 .letter-row {
     display: flex;
 }
 
-#keyboard-cont {
-    margin: 1rem 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.champion-image-margin {
+    margin:8px;
 }
-  
-#keyboard-cont div {
-    display: flex;
-}
-  
-.second-row {
-    margin: 0.5rem 0;
-}
-  
-.keyboard-button {
-    font-size: 1rem;
-    font-weight: 700;
-    padding: 0.5rem;
-    margin: 0 2px;
-    cursor: pointer;
-    text-transform: uppercase;
-}
-  
